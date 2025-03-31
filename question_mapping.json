@@ -1,0 +1,20 @@
+{
+  "questions": [
+    {
+      "question": "What is the output of code -s?",
+      "mapped_script": "E:\\data science tool\\main\\GA1\\first.py"
+    },
+    {
+      "question": "Send a HTTPS request to https://httpbin.org/get",
+      "mapped_script": "E:\\data science tool\\main\\GA1\\second.py"
+    },
+    {
+      "question": "Sort this JSON array of objects by age.",
+      "mapped_script": "E:\\data science tool\\main\\GA1\\ninth.py"
+    },
+    {
+      "question": "Extract tables from a PDF file.",
+      "mapped_script": "E:\\data science tool\\main\\GA4\\pdf2csv.py"
+    }
+  ]
+}

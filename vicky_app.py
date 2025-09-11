@@ -655,7 +655,9 @@ async def get_audio(audio_id: str):
     return FileResponse(audio_path, media_type="audio/mpeg")
 @app.on_event("startup")
 async def start_background_tasks():
-    asyncio.create_task(monitor_api_status())
+    # Only start health monitoring if not on Render (causes connection issues with Gunicorn workers)
+    if not os.getenv('RENDER'):
+        asyncio.create_task(monitor_api_status())
 
 @app.on_event("shutdown")
 async def stop_background_tasks():

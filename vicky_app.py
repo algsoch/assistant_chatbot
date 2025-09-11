@@ -383,22 +383,31 @@ async def monitor_api_status():
 async def check_api_status():
     """Check if the API is available and responding correctly"""
     try:
+        # Determine the base URL based on environment
+        if os.getenv('RENDER'):
+            # On Render, check local health endpoint
+            base_url = f"http://localhost:{os.getenv('PORT', '8000')}"
+        else:
+            # For production, check external endpoint
+            base_url = "https://app.algsoch.tech"
+        
         # First check local health endpoint
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://app.algsoch.tech/health", timeout=10) as response:
+            async with session.get(f"{base_url}/health", timeout=10) as response:
                 if response.status != 200:
                     logger.warning(f"Health check failed with status {response.status}")
                     return "down"
                 
-        # Then check the main API endpoint
-        async with aiohttp.ClientSession() as session:
-            # Just checking if endpoint is accessible, not submitting actual data
-            async with session.post("https://app.algsoch.tech/api", 
-                                   data={"question": "health_check"}, 
-                                   timeout=15) as response:
-                if response.status != 200:
-                    logger.warning(f"API check failed with status {response.status}")
-                    return "down"
+        # Then check the main API endpoint (only for external checks)
+        if not os.getenv('RENDER'):
+            async with aiohttp.ClientSession() as session:
+                # Just checking if endpoint is accessible, not submitting actual data
+                async with session.post(f"{base_url}/api", 
+                                       data={"question": "health_check"}, 
+                                       timeout=15) as response:
+                    if response.status != 200:
+                        logger.warning(f"API check failed with status {response.status}")
+                        return "down"
                 
         return "up"
     except Exception as e:

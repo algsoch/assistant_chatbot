@@ -36,13 +36,3 @@ clip_model_load: llava_projector:  1
 clip_model_load: model size:     169.18 MB
 clip_model_load: metadata size:  0.17 MB
 clip_model_load: params backend buffer size =  169.18 MB (377 tensors)
-get_key_idx: note: key clip.vision.image_grid_pinpoints not found in file
-get_key_idx: note: key clip.vision.mm_patch_merge_type not found in file
-get_key_idx: note: key clip.vision.image_crop_resolution not found in file
-clip_model_load: compute allocated memory: 32.89 MB
-warming up the model with an empty run
-
-llama server listening at http://127.0.0.1:8080
-llama server listening at http://192.168.1.4:8080
-
-warning: this OS doesn't support pledge() security

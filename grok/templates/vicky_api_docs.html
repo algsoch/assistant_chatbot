@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vicky API - Comprehensive Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4c2882;
+            --primary-light: #6b3eb6;
+            --secondary-color: #37bb9c;
+            --dark-color: #2c2c2c;
+            --light-color: #f8f9fa;
+            --gray-color: #e9ecef;
+            --text-color: #343a40;
+            --code-bg: #2d2d2d;
+            --code-color: #f8f8f2;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: radial-gradient(circle at bottom right, rgba(255,255,255,0.2), transparent);
+            pointer-events: none;
+        }
+        
+        .header-content {
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 30px 0 15px;
+            color: var(--secondary-color);
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0 20px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        
+        .nav-tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: var(--transition);
+            background-color: transparent;
+        }
+        
+        .nav-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background-color: var(--gray-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .endpoint {
+            background-color: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .method {
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            margin-right: 15px;
+            font-family: var(--font-mono);
+        }
+        
+        .path {
+            font-family: var(--font-mono);
+            font-size: 18px;
+        }
+        
+        .endpoint-body {
+            padding: 20px;
+        }
+        
+        .parameters {
+            margin-top: 20px;
+        }
+        
+        .parameter {
+            border-bottom: 1px solid var(--gray-color);
+            padding: 12px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 15px;
+        }
+        
+        .parameter:last-child {
+            border-bottom: none;
+        }
+        
+        .param-name {
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+        
+        .param-type {
+            color: var(--primary-color);
+        }
+        
+        .required {
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: #e74c3c;
+            color: white;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        
+        .optional {
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: #3498db;
+            color: white;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        
+        .param-desc {
+            grid-column: span 3;
+            padding-top: 5px;
+            color: #555;
+        }
+        
+        .code-section {
+            margin: 20px 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #343a40;
+            color: white;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            font-family: var(--font-mono);
+            font-size: 14px;
+        }
+        
+        .copy-btn {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 3px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 15px;
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        pre.language-json .key {
+            color: #f92672;
+        }
+        
+        pre.language-json .string {
+            color: #a6e22e;
+        }
+        
+        pre.language-json .number {
+            color: #ae81ff;
+        }
+        
+        pre.language-json .boolean {
+            color: #66d9ef;
+        }
+        
+        pre.language-json .null {
+            color: #fd971f;
+        }
+        
+        .example {
+            margin-top: 30px;
+        }
+        
+        .sub-section {
+            margin: 30px 0;
+        }
+        
+        .response-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .response-table th, .response-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-color);
+        }
+        
+        .response-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .response-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .response-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .try-it {
+            margin-top: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .try-it-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .toggle-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .toggle-btn:hover {
+            background-color: #2ea58a;
+        }
+        
+        .try-it-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .form-input, .form-textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--gray-color);
+            border-radius: var(--border-radius);
+            display: none;
+        }
+        
+        .result pre {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 0;
+            border-radius: 4px;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding: 30px 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+        }
+        
+        footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .curl-example {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+            color: white;
+        }
+        
+        .badge-get {
+            background-color: #61affe;
+        }
+        
+        .badge-post {
+            background-color: #49cc90;
+        }
+        
+        @media (max-width: 768px) {
+            .parameter {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .param-desc {
+                grid-column: 1;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .method {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Vicky API Documentation</h1>
+                <p class="subtitle">A comprehensive API for data science tools, graded assignments, and file processing</p>
+            </div>
+        </header>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="overview">Overview</div>
+            <div class="nav-tab" data-tab="endpoints">Endpoints</div>
+            <div class="nav-tab" data-tab="examples">Examples</div>
+            <div class="nav-tab" data-tab="try-it">Try It</div>
+        </div>
+        
+        <div class="tab-content active" id="overview">
+            <h2>Introduction</h2>
+            <p>
+                The Vicky API provides access to powerful data science tools and automated solutions for various tasks.
+                It allows you to send questions, process files, and get detailed answers to help with data science assignments.
+            </p>
+            
+            <h3>Base URL</h3>
+            <p>All API requests should be made to:</p>
+            <pre>https://app.algsoch.tech/api</pre>
+            
+            <h3>Authentication</h3>
+            <p>
+                Currently, the API is available for public use without authentication. However, IP addresses are logged for security purposes,
+                and rate limiting may be applied to prevent abuse.
+            </p>
+            
+            <h3>Response Formats</h3>
+            <p>
+                The API can return responses in multiple formats:
+            </p>
+            <ul>
+                <li><strong>JSON</strong> (default): Structured data that's easy to parse programmatically</li>
+                <li><strong>HTML</strong>: Formatted responses that can be displayed directly in a browser</li>
+            </ul>
+        </div>
+        
+        <div class="tab-content" id="endpoints">
+            <h2>API Endpoints</h2>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="path">/api/vicky</span>
+                </div>
+                <div class="endpoint-body">
+                    <p>
+                        Process a question with optional file attachment and get a detailed answer.
+                        This endpoint combines the capabilities of all other endpoints with additional features.
+                    </p>
+                    
+                    <h3>Parameters</h3>
+                    <div class="parameters">
+                        <div class="parameter">
+                            <div class="param-name">question<span class="required">Required</span></div>
+                            <div class="param-type">string</div>
+                            <div class="param-desc">
+                                The question or task description to process. This can include references to files, data science concepts, or specific assignments.
+                            </div>
+                        </div>
+                        
+                        <div class="parameter">
+                            <div class="param-name">file<span class="optional">Optional</span></div>
+                            <div class="param-type">file</div>
+                            <div class="param-desc">
+                                File to process alongside the question. Can be a ZIP archive, README.md, or any other file needed to answer the question.
+                            </div>
+                        </div>
+                        
+                        <div class="parameter">
+                            <div class="param-name">format<span class="optional">Optional</span></div>
+                            <div class="param-type">string</div>
+                            <div class="param-desc">
+                                Response format. Either "json" (default) or "html".
+                            </div>
+                        </div>
+                        
+                        <div class="parameter">
+                            <div class="param-name">notify<span class="optional">Optional</span></div>
+                            <div class="param-type">boolean</div>
+                            <div class="param-desc">
+                                Whether to send notifications about this API call. Default is false.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>Response</h3>
+                    <p>For JSON responses (default):</p>
+                    <div class="code-section">
+                        <div class="code-header">
+                            <span>Response (JSON)</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre class="language-json">{
+  "answer": "The detailed answer to the question",
+  "metadata": {
+    "processing_time_seconds": 1.25,
+    "timestamp": "2023-04-15T14:32:10.123456",
+    "api_version": "1.0"
+  },
+  "file": {
+    "id": "abc123de",
+    "name": "example.zip",
+    "path": "uploads/20230415_143200_example.zip",
+    "size": 12345
+  }
+}</pre>
+                    </div>
+                    
+                    <p>For HTML responses (when format=html):</p>
+                    <p>Returns HTML content that can be directly displayed in a browser with proper formatting of code blocks and other elements.</p>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="path">/api/</span>
+                </div>
+                <div class="endpoint-body">
+                    <p>
+                        Simplified endpoint that returns minimal JSON responses. Ideal for automated grading systems that need just the answer.
+                    </p>
+                    
+                    <h3>Parameters</h3>
+                    <div class="parameters">
+                        <div class="parameter">
+                            <div class="param-name">question<span class="required">Required</span></div>
+                            <div class="param-type">string</div>
+                            <div class="param-desc">
+                                The question or task description to process.
+                            </div>
+                        </div>
+                        
+                        <div class="parameter">
+                            <div class="param-name">file<span class="optional">Optional</span></div>
+                            <div class="param-type">file</div>
+                            <div class="param-desc">
+                                File to process alongside the question.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>Response</h3>
+                    <div class="code-section">
+                        <div class="code-header">
+                            <span>Response (JSON)</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre class="language-json">{
+  "answer": "The answer to the question"
+}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="path">/api/process</span>
+                </div>
+                <div class="endpoint-body">
+                    <p>
+                        Process a question with an optional hint about the question type. Useful for specific assignment questions.
+                    </p>
+                    
+                    <h3>Parameters</h3>
+                    <div class="parameters">
+                        <div class="parameter">
+                            <div class="param-name">question<span class="required">Required</span></div>
+                            <div class="param-type">string</div>
+                            <div class="param-desc">
+                                The question or task description to process.
+                            </div>
+                        </div>
+                        
+                        <div class="parameter">
+                            <div class="param-name">file<span class="required">Required</span></div>
+                            <div class="param-type">file</div>
+                            <div class="param-desc">
+                                File to process with the question.
+                            </div>
+                        </div>
+                        
+                        <div class="parameter">
+                            <div class="param-name">question_type<span class="optional">Optional</span></div>
+                            <div class="param-type">string</div>
+                            <div class="param-desc">
+                                Hint about the question type. Values: "npx_readme", "extract_zip"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="examples">
+            <h2>Example API Usage</h2>
+            
+            <div class="sub-section">
+                <h3>Example 1: Simple Question</h3>
+                <p>Asking a data science question without any file:</p>
+                
+                <div class="code-section">
+                    <div class="code-header">
+                        <span>cURL Example</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre class="curl-example">curl -X POST "https://app.algsoch.tech/api/vicky"   -F "question=What is the difference between precision and recall in machine learning?"</pre>
+                </div>
+                
+                <div class="code-section">
+                    <div class="code-header">
+                        <span>Response</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre class="language-json">{
+  "answer": "Precision and recall are metrics used to evaluate classification models in machine learning:
+
+- **Precision** measures the accuracy of positive predictions. It's calculated as TP/(TP+FP), where TP is true positives and FP is false positives. High precision means that when the model predicts the positive class, it's likely correct.
+
+- **Recall** (also called sensitivity) measures the ability to find all positive instances. It's calculated as TP/(TP+FN), where FN is false negatives. High recall means the model captures most of the actual positive cases.
+
+There's typically a trade-off between precision and recall - increasing one often decreases the other. Which metric to prioritize depends on your application. For example, in medical testing, high recall may be more important to catch all potential cases, while in spam filtering, high precision might be preferred to avoid flagging legitimate emails.",
+  "metadata": {
+    "processing_time_seconds": 0.85,
+    "timestamp": "2023-04-15T14:32:10.123456",
+    "api_version": "1.0"
+  }
+}</pre>
+                </div>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Example 2: Processing a ZIP File</h3>
+                <p>Extracting data from a ZIP file containing a CSV:</p>
+                
+                <div class="code-section">
+                    <div class="code-header">
+                        <span>cURL Example</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre class="curl-example">curl -X POST "https://app.algsoch.tech/api/vicky"   -F "question=Extract data from this ZIP file which has a single extract.csv file inside. What is the value in the "answer" column of the CSV file?"   -F "file=@/path/to/data.zip"</pre>
+                </div>
+                
+                <div class="code-section">
+                    <div class="code-header">
+                        <span>Response</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre class="language-json">{
+  "answer": "1234567890",
+  "metadata": {
+    "processing_time_seconds": 2.34,
+    "timestamp": "2023-04-15T14:35:22.654321",
+    "api_version": "1.0"
+  },
+  "file": {
+    "id": "9a8b7c6d",
+    "name": "data.zip",
+    "path": "uploads/20230415_143520_data.zip",
+    "size": 5678
+  }
+}</pre>
+                </div>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Example 3: Formatting README.md with npx prettier</h3>
+                <p>Get the output of npx prettier on a README.md file:</p>
+                
+                <div class="code-section">
+                    <div class="code-header">
+                        <span>cURL Example</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre class="curl-example">curl -X POST "https://app.algsoch.tech/api/vicky"   -F "question=What is the output of running npx prettier on this README.md file?"   -F "file=@/path/to/README.md"   -F "format=html"</pre>
+                </div>
+                
+                <p>The response will be HTML content with proper formatting of the prettier output.</p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="try-it">
+            <h2>Try the API</h2>
+            
+            <div class="try-it">
+                <div class="try-it-header">
+                    <h3>API Tester</h3>
+                    <button class="toggle-btn" id="showForm">Show Form</button>
+                </div>
+                
+                <form class="try-it-form" id="apiForm" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label" for="apiUrl">API Endpoint</label>
+                        <input class="form-input" type="text" id="apiUrl" value="https://app.algsoch.tech/api/vicky" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="question">Question</label>
+                        <textarea class="form-textarea" id="question" placeholder="Enter your question here..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="file">File (optional)</label>
+                        <input class="form-input" type="file" id="file">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="format">Response Format</label>
+                        <select class="form-input" id="format">
+                            <option value="json">JSON</option>
+                            <option value="html">HTML</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Request</button>
+                </form>
+                
+                <div class="result" id="result">
+                    <h4>Response:</h4>
+                    <pre id="response"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>TDS - Tools for Data Science API | <a href="https://app.algsoch.tech">app.algsoch.tech</a></p>
+        <p>&copy; 2023 All rights reserved.</p>
+    </footer>
+    
+    <script>
+    // Video Transcription Logic
+    document.addEventListener('DOMContentLoaded', function() {
+    const videoUrlInput = document.getElementById('videoUrl');
+    const videoFileInput = document.getElementById('videoFile');
+    const startTimeInput = document.getElementById('startTime');
+    const endTimeInput = document.getElementById('endTime');
+    const correctTextCheckbox = document.getElementById('correctText');
+    const translateToHindiCheckbox = document.getElementById('translateToHindi');
+    const transcribeBtn = document.getElementById('transcribeBtn');
+    
+    const transcriptionResults = document.querySelector('.transcription-results');
+    const englishTranscript = document.getElementById('englishTranscript');
+    const hindiTranscript = document.getElementById('hindiTranscript');
+    const englishAudio = document.getElementById('englishAudio');
+    const hindiAudio = document.getElementById('hindiAudio');
+    
+    const copyTranscriptBtn = document.getElementById('copyTranscriptBtn');
+    const downloadTranscriptBtn = document.getElementById('downloadTranscriptBtn');
+    const clearTranscriptionBtn = document.getElementById('clearTranscriptionBtn');
+    
+    const hindiResultTab = document.querySelector('.result-tab[data-result="hindi"]');
+    const transcriptionUsageCount = document.getElementById('transcriptionUsageCount');
+    
+    // Initialize usage counter from localStorage
+    let usageCount = parseInt(localStorage.getItem('transcriptionUsageCount') || '0');
+    updateUsageCount(usageCount);
+    
+    // Function to update and display usage count
+    function updateUsageCount(count) {
+        usageCount = count;
+        localStorage.setItem('transcriptionUsageCount', count.toString());
+        transcriptionUsageCount.textContent = `Used: ${count} times`;
+    }
+    
+    // Tab switching for URL/Upload
+    document.querySelectorAll('.transcription-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Update active tab
+            document.querySelectorAll('.transcription-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding tab content
+            const tabId = this.getAttribute('data-tab') + 'Tab';
+            document.querySelectorAll('.transcription-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    
+    // Tab switching for results (English/Hindi)
+    document.querySelectorAll('.result-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Update active tab
+            document.querySelectorAll('.result-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show corresponding result
+            const resultId = this.getAttribute('data-result') + 'Result';
+            document.querySelectorAll('.result-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(resultId).classList.add('active');
+        });
+    });
+    
+    // Transcribe button click
+    transcribeBtn.addEventListener('click', function() {
+        // Get input values
+        const videoUrl = videoUrlInput.value.trim();
+        const videoFile = videoFileInput.files[0];
+        const startTime = startTimeInput.value ? parseInt(startTimeInput.value) : 0;
+        const endTime = endTimeInput.value ? parseInt(endTimeInput.value) : null;
+        const correctText = correctTextCheckbox.checked;
+        const translateToHindi = translateToHindiCheckbox.checked;
+        
+        // Validate input
+        if (!videoUrl && !videoFile) {
+            alert('Please enter a video URL or upload a video file');
+            return;
+        }
+        
+        // Create form data
+        const formData = new FormData();
+        
+        if (videoUrl) {
+            formData.append('video_url', videoUrl);
+        }
+        
+        if (videoFile) {
+            formData.append('file', videoFile);
+        }
+        
+        formData.append('start_time', startTime);
+        if (endTime) formData.append('end_time', endTime);
+        formData.append('correct_text', correctText);
+        formData.append('translate_to_hindi', translateToHindi);
+        
+        // Show loading indicator
+        transcribeBtn.disabled = true;
+        transcribeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transcribing...';
+        
+        // Hide results while processing
+        transcriptionResults.style.display = 'none';
+        
+        // Send request to server
+        fetch('/transcribe-video', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Reset button
+            transcribeBtn.disabled = false;
+            transcribeBtn.innerHTML = 'Transcribe Video';
+            
+            if (data.success) {
+                // Update usage count
+                updateUsageCount(usageCount + 1);
+                
+                // Display English transcript
+                englishTranscript.textContent = data.corrected_transcript || data.transcript;
+                
+                // Set English audio if available
+                if (data.audio_english_id) {
+                    englishAudio.src = `/audio/${data.audio_english_id}`;
+                    englishAudio.parentElement.style.display = 'block';
+                } else {
+                    englishAudio.parentElement.style.display = 'none';
+                }
+                
+                // Display Hindi transcript and tab if available
+                if (data.hindi_transcript) {
+                    hindiTranscript.textContent = data.hindi_transcript;
+                    hindiResultTab.style.display = 'block';
+                    
+                    // Set Hindi audio if available
+                    if (data.audio_hindi_id) {
+                        hindiAudio.src = `/audio/${data.audio_hindi_id}`;
+                        hindiAudio.parentElement.style.display = 'block';
+                    } else {
+                        hindiAudio.parentElement.style.display = 'none';
+                    }
+                } else {
+                    hindiResultTab.style.display = 'none';
+                }
+                
+                // Show results
+                transcriptionResults.style.display = 'block';
+                
+                // Reset result tabs to English
+                document.querySelector('.result-tab[data-result="english"]').click();
+            } else {
+                alert('Error: ' + (data.error || 'Failed to transcribe video'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            transcribeBtn.disabled = false;
+            transcribeBtn.innerHTML = 'Transcribe Video';
+            alert('Error transcribing video. Please try again.');
+        });
+    });
+    
+    // Copy transcript button
+    copyTranscriptBtn.addEventListener('click', function() {
+        // Get active result container
+        const activeContainer = document.querySelector('.result-container.active');
+        const textElement = activeContainer.querySelector('.transcript-text');
+        
+        // Copy text to clipboard
+        navigator.clipboard.writeText(textElement.textContent).then(() => {
+            this.textContent = 'Copied!';
+            setTimeout(() => { this.textContent = 'Copy Text'; }, 2000);
+        });
+    });
+    
+    // Download transcript button
+    downloadTranscriptBtn.addEventListener('click', function() {
+        // Get active result container
+        const activeContainer = document.querySelector('.result-container.active');
+        const textElement = activeContainer.querySelector('.transcript-text');
+        const isHindi = activeContainer.id === 'hindiResult';
+        
+        // Create file
+        const filename = `transcript_${isHindi ? 'hindi' : 'english'}_${new Date().toISOString().slice(0,10)}.txt`;
+        const blob = new Blob([textElement.textContent], {type: 'text/plain'});
+        
+        // Create download link and click it
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+    });
+    
+    // Clear button
+    clearTranscriptionBtn.addEventListener('click', function() {
+        // Clear inputs
+        videoUrlInput.value = '';
+        videoFileInput.value = '';
+        startTimeInput.value = '';
+        endTimeInput.value = '';
+        correctTextCheckbox.checked = false;
+        translateToHindiCheckbox.checked = false;
+        
+        // Clear results
+        englishTranscript.textContent = '';
+        hindiTranscript.textContent = '';
+        englishAudio.src = '';
+        hindiAudio.src = '';
+        
+        // Hide results section
+        transcriptionResults.style.display = 'none';
+    });
+});
+        // Tab switching
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Copy buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pre = btn.parentElement.nextElementSibling;
+                const text = pre.textContent;
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+                });
+            });
+        });
+        
+        // Toggle API form
+        document.getElementById('showForm').addEventListener('click', () => {
+            const form = document.getElementById('apiForm');
+            const isVisible = form.style.display !== 'none';
+            form.style.display = isVisible ? 'none' : 'block';
+            document.getElementById('showForm').textContent = isVisible ? 'Show Form' : 'Hide Form';
+        });
+        
+        // API form submission
+        document.getElementById('apiForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const apiUrl = document.getElementById('apiUrl').value;
+            const question = document.getElementById('question').value;
+            const file = document.getElementById('file').files[0];
+            const format = document.getElementById('format').value;
+            
+            const formData = new FormData();
+            formData.append('question', question);
+            formData.append('format', format);
+            
+            if (file) {
+                formData.append('file', file);
+            }
+            
+            document.getElementById('response').textContent = 'Loading...';
+            document.getElementById('result').style.display = 'block';
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (format === 'html') {
+                    const html = await response.text();
+                    document.getElementById('response').innerHTML = html;
+                } else {
+                    const data = await response.json();
+                    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

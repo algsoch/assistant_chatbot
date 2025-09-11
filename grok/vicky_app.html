@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vicky - HTML Viewer Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4c2882;
+            --primary-light: #6b3eb6;
+            --secondary-color: #37bb9c;
+            --dark-color: #2c2c2c;
+            --light-color: #f5f5f5;
+            --text-color: #333;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .doc-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .code-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            margin-bottom: -15px;
+            display: inline-block;
+        }
+        
+        .feature-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 8px;
+        }
+        
+        /* HTML Viewer Demo Styles */
+        .demo-container {
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .demo-title {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            margin: -20px -20px 20px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            text-align: center;
+        }
+
+        /* Actual HTML Viewer Component Styles */
+        .html-viewer-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .viewer-header {
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .viewer-content {
+            padding: 15px;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .url-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+        }
+        
+        .html-preview {
+            margin-top: 15px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 15px;
+        }
+        
+        #previewFrame {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: var(--border-radius);
+        }
+        
+        .viewer-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .action-btn.secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .action-btn.secondary:hover {
+            background-color: #2ea58a;
+        }
+        
+        .action-btn.clear {
+            background-color: #6c757d;
+        }
+        
+        .action-btn.clear:hover {
+            background-color: #5a6268;
+        }
+        
+        .source-view {
+            width: 100%;
+            height: 200px;
+            overflow: auto;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            display: none;
+        }
+        
+        .usage-badge {
+            position: absolute;
+            right: 15px;
+            background-color: rgba(0,0,0,0.2);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>HTML Viewer Component</h1>
+            <p>Comprehensive documentation and live demo</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="doc-section">
+            <h2>Component Overview</h2>
+            <p>The HTML Viewer component is a key feature of the Vicky Data Science Assistant Platform that allows users to fetch and view any website's content through a CORS proxy. This enables data scientists to examine web content, understand page structures, and learn about HTML before attempting web scraping tasks.</p>
+            
+            <h3>Key Features</h3>
+            <ul class="feature-list">
+                <li><strong>CORS Proxy Integration:</strong> Access any website content regardless of cross-origin restrictions</li>
+                <li><strong>Live Rendering:</strong> See the website as it would appear in a browser</li>
+                <li><strong>Source Code Viewing:</strong> Toggle between rendered view and raw HTML source</li>
+                <li><strong>Copy Functionality:</strong> Copy HTML code for analysis or educational purposes</li>
+                <li><strong>Usage Tracking:</strong> Anonymous tracking to improve feature development</li>
+            </ul>
+        </div>
+        
+        <!-- Live Demo Section -->
+        <div class="doc-section">
+            <h2>Live Demo</h2>
+            <p>Below is a working implementation of the HTML Viewer component. Enter a website URL and click "View" to see it rendered in the iframe.</p>
+            
+            <div class="demo-container">
+                <div class="demo-title">Interactive HTML Viewer Demo</div>
+                
+                <!-- Actual HTML Viewer Component -->
+                <div class="html-viewer-section">
+                    <div class="viewer-header">
+                        <i class="fas fa-globe"></i> HTML Viewer
+                        <div class="usage-badge" id="viewerUsageCount">Used: 0 times</div>
+                    </div>
+                    <div class="viewer-content">
+                        <div class="form-group">
+                            <div class="url-input-container">
+                                <input type="text" id="urlInput" class="url-input" placeholder="Enter website URL (https://example.com)">
+                                <button id="fetchUrlBtn" class="action-btn">View</button>
+                            </div>
+                        </div>
+                        <div class="html-preview" id="htmlPreview" style="display:none;">
+                            <div class="preview-container">
+                                <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+                            </div>
+                            <div class="viewer-actions">
+                                <button id="copyHtmlBtn" class="action-btn">Copy HTML</button>
+                                <button id="viewSourceBtn" class="action-btn secondary">View Source</button>
+                                <button id="clearViewerBtn" class="action-btn clear">Clear</button>
+                            </div>
+                        </div>
+                        <pre id="sourceView" class="source-view" style="display:none;"></pre>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 20px; font-style: italic;">Try entering a URL like "example.com" or "mozilla.org"</p>
+            </div>
+        </div>
+        
+        <!-- Implementation Details -->
+        <div class="doc-section">
+            <h2>Implementation Details</h2>
+            
+            <h3>HTML Structure</h3>
+            <div class="code-header">HTML</div>
+            <div class="code-block">
+&lt;div class="html-viewer-section"&gt;
+    &lt;div class="viewer-header"&gt;
+        &lt;i class="fas fa-globe"&gt;&lt;/i&gt; HTML Viewer
+        &lt;div class="usage-badge" id="viewerUsageCount"&gt;Used: 0 times&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="viewer-content"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;div class="url-input-container"&gt;
+                &lt;input type="text" id="urlInput" class="url-input" placeholder="Enter website URL (https://example.com)"&gt;
+                &lt;button id="fetchUrlBtn" class="action-btn"&gt;View&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="html-preview" id="htmlPreview" style="display:none;"&gt;
+            &lt;div class="preview-container"&gt;
+                &lt;iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"&gt;&lt;/iframe&gt;
+            &lt;/div&gt;
+            &lt;div class="viewer-actions"&gt;
+                &lt;button id="copyHtmlBtn" class="action-btn"&gt;Copy HTML&lt;/button&gt;
+                &lt;button id="viewSourceBtn" class="action-btn secondary"&gt;View Source&lt;/button&gt;
+                &lt;button id="clearViewerBtn" class="action-btn clear"&gt;Clear&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;pre id="sourceView" class="source-view" style="display:none;"&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</div>
+            
+            <h3>JavaScript Implementation</h3>
+            <div class="code-header">JavaScript</div>
+            <div class="code-block">
+// HTML Viewer Logic
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const urlInput = document.getElementById('urlInput');
+    const fetchUrlBtn = document.getElementById('fetchUrlBtn');
+    const htmlPreview = document.getElementById('htmlPreview');
+    const previewFrame = document.getElementById('previewFrame');
+    const copyHtmlBtn = document.getElementById('copyHtmlBtn');
+    const viewSourceBtn = document.getElementById('viewSourceBtn');
+    const clearViewerBtn = document.getElementById('clearViewerBtn');
+    const viewerUsageCount = document.getElementById('viewerUsageCount');
+    
+    // Initialize usage counter from localStorage
+    let usageCount = parseInt(localStorage.getItem('htmlViewerUsageCount') || '0');
+    updateUsageCount(usageCount);
+    
+    // Function to update and display usage count
+    function updateUsageCount(count) {
+        usageCount = count;
+        localStorage.setItem('htmlViewerUsageCount', count.toString());
+        viewerUsageCount.textContent = `Used: ${count} times`;
+        
+        // Log usage for analytics 
+        if (count % 10 === 0 && count > 0) {
+            fetch('/log-html-viewer-usage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ count: count })
+            }).catch(err => console.log('Usage tracking error:', err));
+        }
+    }
+    
+    // Create source view element if needed
+    function getSourceView() {
+        let sourceView = document.getElementById('sourceView');
+        if (!sourceView) {
+            sourceView = document.createElement('pre');
+            sourceView.id = 'sourceView';
+            sourceView.className = 'source-view';
+            htmlPreview.appendChild(sourceView);
+        }
+        return sourceView;
+    }
+    
+    // Fetch website content
+    fetchUrlBtn.addEventListener('click', function() {
+        let url = urlInput.value.trim();
+        if (!url) return;
+        
+        // Add https:// if not present
+        if (!/^https?:\/\//i.test(url)) {
+            url = 'https://' + url;
+            urlInput.value = url;
+        }
+        
+        // Show loading state
+        previewFrame.srcdoc = '<div style="padding:20px; text-align:center;"><p>Loading...</p></div>';
+        htmlPreview.style.display = 'block';
+        
+        // Hide source view if visible
+        const sourceView = getSourceView();
+        sourceView.style.display = 'none';
+        
+        // Using a CORS proxy to fetch the content
+        fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.contents) {
+                    // Display the HTML in the iframe
+                    previewFrame.srcdoc = data.contents;
+                    
+                    // Store the source for later viewing
+                    sourceView.textContent = data.contents;
+                    
+                    // Increment the usage count
+                    updateUsageCount(usageCount + 1);
+                } else {
+                    previewFrame.srcdoc = '<div style="padding:20px; color:red;">Error: Could not fetch content.</div>';
+                }
+            })
+            .catch(error => {
+                previewFrame.srcdoc = `<div style="padding:20px; color:red;">Error: ${error.message}</div>`;
+            });
+    });
+    
+    // Copy HTML content
+    copyHtmlBtn.addEventListener('click', function() {
+        const sourceView = getSourceView();
+        const html = sourceView.textContent;
+        
+        navigator.clipboard.writeText(html).then(() => {
+            this.textContent = 'Copied!';
+            setTimeout(() => { this.textContent = 'Copy HTML'; }, 2000);
+        });
+    });
+    
+    // View source HTML
+    viewSourceBtn.addEventListener('click', function() {
+        const sourceView = getSourceView();
+        if (sourceView.style.display === 'block') {
+            sourceView.style.display = 'none';
+            this.textContent = 'View Source';
+        } else {
+            sourceView.style.display = 'block';
+            this.textContent = 'Hide Source';
+        }
+    });
+    
+    // Clear the viewer
+    clearViewerBtn.addEventListener('click', function() {
+        urlInput.value = '';
+        htmlPreview.style.display = 'none';
+        previewFrame.srcdoc = '';
+        
+        const sourceView = getSourceView();
+        sourceView.style.display = 'none';
+        sourceView.textContent = '';
+        viewSourceBtn.textContent = 'View Source';
+    });
+    
+    // Handle Enter key in URL input
+    urlInput.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            fetchUrlBtn.click();
+        }
+    });
+});</div>
+        </div>
+        
+        <!-- Technical Documentation -->
+        <div class="doc-section">
+            <h2>Technical Documentation: Vicky Data Science Assistant Platform</h2>
+            
+            <h3>System Architecture & Technology Stack</h3>
+            <h4>Core Components</h4>
+            <ul class="feature-list">
+                <li><strong>Backend Architecture:</strong> Python-based with FastAPI framework</li>
+                <li><strong>Frontend:</strong> Responsive single-page application using HTML5, CSS3, and vanilla JavaScript</li>
+                <li><strong>Integration Layer:</strong> Webhook support for Discord, Slack, and Telegram notifications</li>
+                <li><strong>Data Processing:</strong> Python core libraries with specialized modules for file handling</li>
+                <li><strong>Question Processing Engine:</strong> Pattern matching algorithm with specialized solvers</li>
+            </ul>
+            
+            <h4>Core Files</h4>
+            <ul class="feature-list">
+                <li><strong>vicky_app.py:</strong> Web server, API endpoints, HTML rendering, and system management</li>
+                <li><strong>vicky_server.py:</strong> Question analysis, pattern matching, and solution generation</li>
+            </ul>
+            
+            <h3>Technical Implementation Details</h3>
+            
+            <h4>1. Communication Infrastructure</h4>
+            <h5>1.1 Webhook Integration System</h5>
+            <p>The webhook system uses a buffering mechanism to batch notifications. This prevents notification overload while maintaining detailed logs. The system supports:</p>
+            <ul class="feature-list">
+                <li><strong>Discord:</strong> Rich message formatting with embedded content</li>
+                <li><strong>Telegram:</strong> Direct messages to specified chat IDs</li>
+                <li><strong>Slack:</strong> Interactive messages through incoming webhooks</li>
+            </ul>
+            <p>Messages are formatted consistently across platforms and include important metadata like IP addresses and question content.</p>
+            
+            <h4>2. Pattern Matching Engine</h4>
+            <p>The pattern matching engine uses sophisticated regex patterns to identify question intent. This enables:</p>
+            <ul class="feature-list">
+                <li><strong>Contextual Understanding:</strong> Detecting specific question types like date ranges</li>
+                <li><strong>Command Recognition:</strong> Identifying code commands and parameters</li>
+                <li><strong>Assignment Classification:</strong> Routing questions to specific GA1-GA5 solvers</li>
+                <li><strong>File Association:</strong> Linking questions with relevant uploaded files</li>
+            </ul>
+            <p>The pattern matching system routes questions to specialized solver functions based on identified patterns, providing targeted responses for each use case.</p>
+            
+            <h4>3. File Management System</h4>
+            <p>The file management system implements a registry pattern that:</p>
+            <ul class="feature-list">
+                <li><strong>Generates Unique IDs:</strong> Creates 8-character unique identifiers for each file</li>
+                <li><strong>Stores Metadata:</strong> Tracks original filenames, timestamps, and file types</li>
+                <li><strong>Provides Contextual Access:</strong> Allows questions to reference files by ID</li>
+                <li><strong>Type-Specific Handling:</strong> Different processing for ZIP archives vs. README files</li>
+            </ul>
+            <p>This approach enables secure file referencing without exposing filesystem paths to users. The system automatically detects file types and adds relevant context to questions.</p>
+            
+            <h4>4. Base64 Image Decoder/Encoder</h4>
+            <p>The Base64 decoder/encoder is entirely client-side for performance and security, featuring:</p>
+            <ul class="feature-list">
+                <li><strong>Intelligent Format Detection:</strong> Automatically detects and fixes missing prefixes</li>
+                <li><strong>Robust Error Handling:</strong> Gracefully handles malformed Base64 data</li>
+                <li><strong>Clipboard Integration:</strong> Direct paste support for images from clipboard</li>
+                <li><strong>Usage Analytics:</strong> Tracks usage patterns for feature improvements</li>
+                <li><strong>File Export:</strong> Downloads decoded images in their native format</li>
+            </ul>
+            <p>The implementation uses modern JavaScript APIs with fallbacks for broad browser compatibility.</p>
+            
+            <h4>5. HTML Viewer with CORS Proxy</h4>
+            <p>The HTML Viewer uses a third-party CORS proxy (allorigins.win) to:</p>
+            <ul class="feature-list">
+                <li><strong>Bypass CORS Restrictions:</strong> Fetch content from any website regardless of CORS policy</li>
+                <li><strong>Render Live Content:</strong> Display website HTML in a sandboxed iframe</li>
+                <li><strong>Provide Source Viewing:</strong> Toggle between rendered and source views</li>
+                <li><strong>Enable HTML Copying:</strong> Copy website HTML for analysis and modification</li>
+                <li><strong>Track Usage:</strong> Collect anonymous usage statistics for feature improvement</li>
+            </ul>
+            <p>The viewer uses a sandboxed iframe for security and prevents script execution with appropriate sandbox attributes.</p>
+            
+            <h4>6. API Layer and Documentation</h4>
+            <p>The platform features a comprehensive API with multiple endpoints. The API system includes:</p>
+            <ul class="feature-list">
+                <li><strong>Multiple Response Formats:</strong> JSON and HTML output options</li>
+                <li><strong>File Upload Support:</strong> Process questions with attached files</li>
+                <li><strong>Notification Integration:</strong> Optional webhook notifications for API calls</li>
+                <li><strong>Comprehensive Documentation:</strong> Interactive API documentation with examples</li>
+                <li><strong>Security Features:</strong> IP logging and optional rate limiting</li>
+            </ul>
+            
+            <h4>7. Authentication and Security</h4>
+            <p>Security measures include:</p>
+            <ul class="feature-list">
+                <li><strong>IP Logging:</strong> Tracks all API and UI interactions with appropriate headers</li>
+                <li><strong>Admin Endpoints:</strong> Protected access to usage statistics and logs</li>
+                <li><strong>Environment Variables:</strong> Sensitive values stored in environment variables</li>
+                <li><strong>XSS Protection:</strong> Proper HTML escaping for user-generated content</li>
+                <li><strong>Input Validation:</strong> Thorough validation of all user inputs</li>
+            </ul>
+            
+            <h3>User Interface Components</h3>
+            
+            <h4>1. Chat Interface</h4>
+            <p>The central chat interface provides:</p>
+            <ul class="feature-list">
+                <li><strong>Message History:</strong> Displays conversation with the assistant</li>
+                <li><strong>Code Formatting:</strong> Automatic syntax highlighting for code snippets</li>
+                <li><strong>File Uploads:</strong> Drag-and-drop or button-based file uploads</li>
+                <li><strong>Copy Functionality:</strong> One-click copying of code blocks</li>
+                <li><strong>Responsive Design:</strong> Works on both desktop and mobile devices</li>
+            </ul>
+            
+            <h4>2. Question Categories and Navigation</h4>
+            <p>The navigation system uses:</p>
+            <ul class="feature-list">
+                <li><strong>Tab-Based Navigation:</strong> Clean switching between question categories</li>
+                <li><strong>Dynamic Content Loading:</strong> Questions loaded based on selected category</li>
+                <li><strong>Active State Tracking:</strong> Visual feedback for current selection</li>
+                <li><strong>Event Delegation:</strong> Efficient event handling for lists of questions</li>
+            </ul>
+            
+            <h4>3. File Management UI</h4>
+            <p>The file management UI provides:</p>
+            <ul class="feature-list">
+                <li><strong>File Listing:</strong> Shows all uploaded files with metadata</li>
+                <li><strong>File Actions:</strong> Options to use or delete files</li>
+                <li><strong>Upload Interface:</strong> Simple form for file uploading</li>
+                <li><strong>File References:</strong> Easily reference files in questions</li>
+                <li><strong>Automatic Updates:</strong> List refreshes after actions</li>
+            </ul>
+            
+            <h3>Integration Architecture</h3>
+            
+            <h4>1. Server-Client Communication</h4>
+            <p>The application uses a RESTful API pattern with:</p>
+            <ul class="feature-list">
+                <li><strong>Form Data:</strong> Multipart/form-data for file uploads</li>
+                <li><strong>JSON Responses:</strong> Structured data for programmatic use</li>
+                <li><strong>HTML Responses:</strong> Formatted content for direct display</li>
+                <li><strong>Status Updates:</strong> Real-time status indicators for server health</li>
+            </ul>
+            
+            <h4>2. External Service Integration</h4>
+            <p>The application integrates with:</p>
+            <ul class="feature-list">
+                <li><strong>Discord:</strong> Webhook notifications for API usage</li>
+                <li><strong>Telegram:</strong> Bot API for notifications and alerts</li>
+                <li><strong>Slack:</strong> Incoming webhooks for system events</li>
+                <li><strong>CORS Proxy:</strong> Third-party service for HTML viewing</li>
+                <li><strong>Local File System:</strong> For persistent storage of uploads</li>
+            </ul>
+            
+            <h3>Data Flow Architecture</h3>
+            <ol class="feature-list">
+                <li><strong>User Input:</strong> Question text + optional file upload</li>
+                <li><strong>Pattern Analysis:</strong> Classification of question intent</li>
+                <li><strong>Solver Selection:</strong> Routing to appropriate solver function</li>
+                <li><strong>Response Generation:</strong> Creation of formatted answer</li>
+                <li><strong>Data Enrichment:</strong> Addition of code blocks, formatting</li>
+                <li><strong>Client Delivery:</strong> Rendering in chat interface</li>
+            </ol>
+            
+            <h3>Administrative Features</h3>
+            <p>Administrative features include:</p>
+            <ul class="feature-list">
+                <li><strong>Usage Analytics:</strong> Statistics on feature usage</li>
+                <li><strong>IP Logs:</strong> Detailed records of system access</li>
+                <li><strong>API Statistics:</strong> Information on API endpoint usage</li>
+                <li><strong>Tool Usage:</strong> Tracking of individual tool popularity</li>
+                <li><strong>Error Monitoring:</strong> Centralized error logging and tracking</li>
+            </ul>
+            
+            <h3>Conclusion</h3>
+            <p>The Vicky Data Science Assistant Platform is a sophisticated, multi-layered application that combines modern web technologies with advanced Python backend capabilities. Its modular architecture allows for easy extension and maintenance, while the comprehensive API enables integration with external systems. The platform's focus on user experience, combined with powerful data processing capabilities, makes it an effective tool for data science education and assistance.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Vicky Data Science Assistant Platform &copy; 2023</p>
+    </footer>
+    
+    <script>
+        // HTML Viewer Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const urlInput = document.getElementById('urlInput');
+            const fetchUrlBtn = document.getElementById('fetchUrlBtn');
+            const htmlPreview = document.getElementById('htmlPreview');
+            const previewFrame = document.getElementById('previewFrame');
+            const copyHtmlBtn = document.getElementById('copyHtmlBtn');
+            const viewSourceBtn = document.getElementById('viewSourceBtn');
+            const clearViewerBtn = document.getElementById('clearViewerBtn');
+            const viewerUsageCount = document.getElementById('viewerUsageCount');
+            
+            // Initialize usage counter from localStorage
+            let usageCount = parseInt(localStorage.getItem('htmlViewerDemoCount') || '0');
+            updateUsageCount(usageCount);
+            
+            // Function to update and display usage count
+            function updateUsageCount(count) {
+                usageCount = count;
+                localStorage.setItem('htmlViewerDemoCount', count.toString());
+                viewerUsageCount.textContent = `Used: ${count} times`;
+            }
+            
+            // Create source view element if needed
+            function getSourceView() {
+                let sourceView = document.getElementById('sourceView');
+                if (!sourceView) {
+                    sourceView = document.createElement('pre');
+                    sourceView.id = 'sourceView';
+                    sourceView.className = 'source-view';
+                    htmlPreview.appendChild(sourceView);
+                }
+                return sourceView;
+            }
+            
+            // Fetch website content
+            fetchUrlBtn.addEventListener('click', function() {
+                let url = urlInput.value.trim();
+                if (!url) return;
+                
+                // Add https:// if not present
+                if (!/^https?:\/\//i.test(url)) {
+                    url = 'https://' + url;
+                    urlInput.value = url;
+                }
+                
+                // Show loading state
+                previewFrame.srcdoc = '<div style="padding:20px; text-align:center;"><p>Loading...</p></div>';
+                htmlPreview.style.display = 'block';
+                
+                // Hide source view if visible
+                const sourceView = getSourceView();
+                sourceView.style.display = 'none';
+                
+                // Using a CORS proxy to fetch the content
+                fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.contents) {
+                            // Display the HTML in the iframe
+                            previewFrame.srcdoc = data.contents;
+                            
+                            // Store the source for later viewing
+                            sourceView.textContent = data.contents;
+                            
+                            // Increment the usage count
+                            updateUsageCount(usageCount + 1);
+                        } else {
+                            previewFrame.srcdoc = '<div style="padding:20px; color:red;">Error: Could not fetch content.</div>';
+                        }
+                    })
+                    .catch(error => {
+                        previewFrame.srcdoc = `<div style="padding:20px; color:red;">Error: ${error.message}</div>`;
+                    });
+            });
+            
+            // Copy HTML content
+            copyHtmlBtn.addEventListener('click', function() {
+                const sourceView = getSourceView();
+                const html = sourceView.textContent;
+                
+                navigator.clipboard.writeText(html).then(() => {
+                    this.textContent = 'Copied!';
+                    setTimeout(() => { this.textContent = 'Copy HTML'; }, 2000);
+                });
+            });
+            
+            // View source HTML
+            viewSourceBtn.addEventListener('click', function() {
+                const sourceView = getSourceView();
+                if (sourceView.style.display === 'block') {
+                    sourceView.style.display = 'none';
+                    this.textContent = 'View Source';
+                } else {
+                    sourceView.style.display = 'block';
+                    this.textContent = 'Hide Source';
+                }
+            });
+            
+            // Clear the viewer
+            clearViewerBtn.addEventListener('click', function() {
+                urlInput.value = '';
+                htmlPreview.style.display = 'none';
+                previewFrame.srcdoc = '';
+                
+                const sourceView = getSourceView();
+                sourceView.style.display = 'none';
+                sourceView.textContent = '';
+                viewSourceBtn.textContent = 'View Source';
+            });
+            
+            // Handle Enter key in URL input
+            urlInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    fetchUrlBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

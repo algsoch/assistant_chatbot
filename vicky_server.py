@@ -13686,45 +13686,45 @@ def should_use_conversational_ai(query):
     
     return False
 
-def get_conversational_response(query):
-    """Get conversational response using Gemini AI"""
-    try:
-        import google.generativeai as genai
-        from dotenv import load_dotenv
+# def get_conversational_response(query):
+#     """Get conversational response using Gemini AI"""
+#     try:
+#         import google.generativeai as genai
+#         from dotenv import load_dotenv
         
-        # Load environment variables
-        load_dotenv()
+#         # Load environment variables
+#         load_dotenv()
         
-        # Get Gemini API key from environment
-        api_key = os.environ.get('GEMINI_API_KEY')
-        if not api_key:
-            return "I'm sorry, I need a Gemini API key to provide conversational responses. Please check your environment configuration."
+#         # Get Gemini API key from environment
+#         api_key = os.environ.get('GEMINI_API_KEY')
+#         if not api_key:
+#             return "I'm sorry, I need a Gemini API key to provide conversational responses. Please check your environment configuration."
         
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+#         genai.configure(api_key=api_key)
+#         model = genai.GenerativeModel('gemini-1.5-flash')
         
-        # Create a helpful assistant prompt
-        system_prompt = """You are Vicky, a helpful AI assistant. You are knowledgeable about programming, technology, data science, and general topics. 
+#         # Create a helpful assistant prompt
+#         system_prompt = """You are Vicky, a helpful AI assistant. You are knowledgeable about programming, technology, data science, and general topics. 
         
-        Provide helpful, accurate, and conversational responses. If someone asks about specific technical implementations or wants you to create code/files, let them know you can help guide them but they might need to be more specific about their requirements.
+#         Provide helpful, accurate, and conversational responses. If someone asks about specific technical implementations or wants you to create code/files, let them know you can help guide them but they might need to be more specific about their requirements.
         
-        Keep responses concise but informative. Be friendly and professional."""
+#         Keep responses concise but informative. Be friendly and professional."""
         
-        full_prompt = f"{system_prompt}\n\nUser: {query}\n\nAssistant:"
+#         full_prompt = f"{system_prompt}\n\nUser: {query}\n\nAssistant:"
         
-        response = model.generate_content(full_prompt)
-        return response.text.strip()
+#         response = model.generate_content(full_prompt)
+#         return response.text.strip()
         
-    except Exception as e:
-        return f"I apologize, but I'm having trouble processing your request right now. Error: {str(e)}"
+    # except Exception as e:
+    #     return f"I apologize, but I'm having trouble processing your request right now. Error: {str(e)}"
 
 def answer_question(query, explicit_file_path=None):
     """Main function to process a question and return an answer"""
     
     # First, check if this should be a conversational response
-    if should_use_conversational_ai(query):
-        print("Using conversational AI for query")
-        return get_conversational_response(query)
+    # if should_use_conversational_ai(query):
+    #     print("Using conversational AI for query")
+    #     return get_conversational_response(query)
     
     # For technical tasks, use the existing GA solution system
     print("Using GA solution system for technical query")
@@ -13732,10 +13732,10 @@ def answer_question(query, explicit_file_path=None):
     # Find best matching question
     match = find_best_question_match(query)
     
-    if not match:
-        # If no GA solution found, fall back to conversational AI
-        print("No GA solution found, falling back to conversational AI")
-        return get_conversational_response(query)
+    # if not match:
+    #     # If no GA solution found, fall back to conversational AI
+    #     print("No GA solution found, falling back to conversational AI")
+    #     return get_conversational_response(query)
     
     # Execute the solution
     file_path = match['file']

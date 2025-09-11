@@ -3,13 +3,21 @@ services:
     name: vicky-chatbot-app
     env: python
     plan: free
-    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
-    startCommand: gunicorn vicky_app:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    region: oregon
+    buildCommand: |
+      python -m pip install --upgrade pip==23.3.1
+      python -m pip install setuptools==68.2.2 wheel==0.42.0
+      python -m pip install --no-cache-dir -r requirements.txt
+    startCommand: gunicorn vicky_app:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.7
       - key: PORT
         value: 8000
+      - key: DISABLE_COLLECTSTATIC
+        value: 1
+      - key: PYTHONUNBUFFERED
+        value: 1
       - key: GEMINI_API_KEY
         sync: false
       - key: DISCORD_WEBHOOK

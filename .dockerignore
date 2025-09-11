@@ -1,0 +1,71 @@
+# Git files
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+debug.log
+*.log.*
+
+# Temporary files
+temp_files/
+uploads/
+cache/
+
+# Documentation
+README.md
+*.md
+
+# Development files
+test_*.py
+*_test.py
+testing.py
+query_testing.py
+
+# Deployment files
+render.yaml
+Procfile
+runtime.txt
+.python-version
+vercel_deploy/
+
+# Large model files
+models/
+*.llamafile
+
+# Node modules (if any)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

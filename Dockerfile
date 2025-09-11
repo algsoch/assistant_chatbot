@@ -19,14 +19,23 @@ RUN pip install --no-cache-dir --upgrade pip==23.3.1 && \
 
 # Copy application files
 COPY vicky_app.py vicky_server.py vickys.json ./
-COPY templates/ templates/
 COPY static/ static/
+COPY docker-entrypoint.sh /usr/local/bin/
 
-# Create necessary directories
-RUN mkdir -p uploads temp_files
+# Create necessary directories including writable templates
+RUN mkdir -p uploads temp_files templates
+
+# Copy templates to temporary location for later initialization
+COPY templates/ /tmp/templates_source/
+
+# Make entrypoint script executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Expose port
 EXPOSE 8000
+
+# Set entrypoint
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Run the application
 CMD ["gunicorn", "vicky_app:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--timeout", "120"]

@@ -17,7 +17,8 @@ services:
       - ./uploads:/app/uploads
       - ./temp_files:/app/temp_files
       - ./static:/app/static:ro
-      - ./templates:/app/templates:ro
+      # Mount templates as writable for dynamic generation
+      - templates_data:/app/templates
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/info"]
@@ -38,3 +39,6 @@ services:
     restart: unless-stopped
     profiles:
       - production
+
+volumes:
+  templates_data:

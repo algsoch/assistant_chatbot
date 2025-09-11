@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDS API Documentation</title>
+    <!-- CSS styles here -->
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TDS API Documentation</h1>
+        </header>
+        
+        <section>
+            <h2>Asking Questions</h2>
+            
+            <h3>POST /api/ask_with_file</h3>
+            <p>Ask a question with an optional file attachment</p>
+            
+            <h4>Parameters</h4>
+            <ul>
+                <li><strong>question</strong> (required) - The question text</li>
+                <li><strong>file</strong> (optional) - A file to use with the question</li>
+            </ul>
+            
+            <h4>Example</h4>
+            <pre>
+curl -X POST "http://yourdomain.com/api/ask_with_file"   -F "question=Extract data from this ZIP file"   -F "file=@/path/to/file.zip"
+            </pre>
+            
+            <h4>Response</h4>
+            <pre>
+{
+  "success": true,
+  "answer": "The answer from extract.csv is 42",
+  "question": "Extract data from this ZIP file"
+}
+            </pre>
+        </section>
+        <section>
+    <h2>Assignment Submission API</h2>
+    
+    <h3>POST /api/</h3>
+    <p>Main API endpoint for assignment submissions that returns a minimal JSON response format</p>
+    
+    <h4>Parameters</h4>
+    <ul>
+        <li><strong>question</strong> (required) - The question text</li>
+        <li><strong>file</strong> (optional) - A file to use with the question</li>
+    </ul>
+    
+    <h4>Example</h4>
+    <pre>
+curl -X POST "https://your-app.vercel.app/api/"   -H "Content-Type: multipart/form-data"   -F "question=Download and unzip file abcd.zip which has a single extract.csv file inside. What is the value in the "answer" column of the CSV file?"   -F "file=@abcd.zip"
+    </pre>
+    
+    <h4>Response</h4>
+    <pre>
+{
+  "answer": "1234567890"
+}
+    </pre>
+    
+    <p>The response contains a single "answer" field with the exact text that can be submitted for the assignment.</p>
+</section>
+        
+        <section>
+    <h2>File Processing API</h2>
+    
+    <h3>POST /api/process</h3>
+    <p>Process a question that requires a file (like README.md for Question 3 or ZIP for Question 8)</p>
+    
+    <h4>Parameters</h4>
+    <ul>
+        <li><strong>question</strong> (required) - The question text</li>
+        <li><strong>file</strong> (required) - The file to process</li>
+        <li><strong>question_type</strong> (optional) - Hint about question type:
+            <ul>
+                <li><code>npx_readme</code> - For GA1 third question (README.md with npx)</li>
+                <li><code>extract_zip</code> - For GA1 eighth question (Extract from ZIP)</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <h4>cURL Example</h4>
+    <pre>
+# For README.md (Question 3)
+curl -X POST "http://localhost:8000/api/process"   -F "question=What is the output of npx prettier on this README file?"   -F "file=@/path/to/README.md"   -F "question_type=npx_readme"
+
+# For ZIP file (Question 8)
+curl -X POST "http://localhost:8000/api/process"   -F "question=What is the value in the answer column?"   -F "file=@/path/to/q-extract-csv-zip.zip"   -F "question_type=extract_zip"
+    </pre>
+</section>
+    </div>
+</body>
+</html>

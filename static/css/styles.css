@@ -1,0 +1,69 @@
+
+:root {
+    --primary-color: #4c2882;
+    --primary-light: #6b3eb6;
+    --secondary-color: #37bb9c;
+    --dark-color: #2c2c2c;
+    --light-color: #f5f5f5;
+    --success-color: #4CAF50;
+    --error-color: #f44336;
+    --warning-color: #ff9800;
+    --text-color: #333;
+    --border-radius: 8px;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Rest of your CSS here */
+
+/* Vicky branding styles */
+.vicky-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vicky-logo {
+    width: 60px;
+    height: 60px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+.vicky-info {
+    flex-grow: 1;
+}
+
+/* Enhanced category tabs for GA1-GA5 */
+.category-container {
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid #eee;
+    scrollbar-width: thin;
+}
+
+.category-tab {
+    flex: 0 0 auto;
+    padding: 8px 15px;
+    margin-right: 2px;
+}

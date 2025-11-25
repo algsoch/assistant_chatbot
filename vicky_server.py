@@ -1710,7 +1710,7 @@ def ga1_second_solution(query=None):
     import re
     
     # Default parameters
-    url = "https://httpbin.org/get"
+    url = "https://postman-echo.com/get"  # Using working alternative since httpbin.org is down
     email = "24f2006438@ds.study.iitm.ac.in"
     
     # Try to extract custom parameters from the query
@@ -13732,10 +13732,10 @@ def answer_question(query, explicit_file_path=None):
     # Find best matching question
     match = find_best_question_match(query)
     
-    # if not match:
-    #     # If no GA solution found, fall back to conversational AI
-    #     print("No GA solution found, falling back to conversational AI")
-    #     return get_conversational_response(query)
+    if not match:
+        # If no GA solution found, return a helpful message
+        print("No matching question found in the TDS system")
+        return "I couldn't find a matching question in the TDS assignment system. This might be a new question or the query needs to be rephrased. Please check if your question matches one of the existing TDS assignments."
     
     # Execute the solution
     file_path = match['file']

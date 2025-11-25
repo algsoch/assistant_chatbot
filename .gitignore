@@ -4,6 +4,9 @@
 .env.production
 .env.development
 
+# Archive folder (old/experimental files)
+_archive/
+
 # Python
 __pycache__/
 *.py[cod]

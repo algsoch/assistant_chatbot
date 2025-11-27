@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir --upgrade pip==23.3.1 && \
 # Copy application files
 COPY vicky_app.py vicky_server.py vickys.json ./
 COPY static/ static/
-COPY docker-entrypoint.sh /usr/local/bin/
+COPY config/docker-entrypoint.sh /usr/local/bin/
 
 # Create necessary directories including writable templates
 RUN mkdir -p uploads temp_files templates

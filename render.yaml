@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: vicky-tds-assistant
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: |
+      python -m pip install --upgrade pip
+      python -m pip install setuptools wheel
+      python -m pip install --no-cache-dir -r requirements.txt
+    startCommand: uvicorn vicky_app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.7
+      - key: PYTHONUNBUFFERED
+        value: 1
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DISCORD_WEBHOOK
+        sync: false
+      - key: SLACK_WEBHOOK
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+    healthCheckPath: /api/info
